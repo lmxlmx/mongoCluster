@@ -1,0 +1,130 @@
+version: "3.7"
+services:
+
+
+  rs11:
+    image: mongo:4.4.1
+    volumes:
+      - ./data/rs1/rs11:/data/db
+    networks:
+      - mongonet    
+    command: mongod --shardsvr --replSet "rs1" --bind_ip_all
+    restart: always
+
+  rs12:
+    image: mongo:4.4.1
+    volumes:
+      - ./data/rs1/rs12:/data/db
+    networks:
+      - mongonet
+    command: mongod --shardsvr --replSet "rs1"  --bind_ip_all
+    restart: always
+
+  rs13:
+    image: mongo:4.4.1
+    volumes:
+      - ./data/rs1/rs13:/data/db
+    networks:
+      - mongonet
+    command: mongod --shardsvr --replSet "rs1" --bind_ip_all
+    restart: always
+
+  
+  rs21:
+    image: mongo:4.4.1
+    volumes:
+      - ./data/rs2/rs21:/data/db
+    networks:
+      - mongonet
+    command: mongod --shardsvr --replSet "rs2" --bind_ip_all
+    restart: always
+
+  rs22:
+    image: mongo:4.4.1
+    volumes:
+      - ./data/rs2/rs22:/data/db
+    networks:
+      - mongonet
+    command: mongod --shardsvr --replSet "rs2" --bind_ip_all
+    restart: always
+
+  rs23:
+    image: mongo:4.4.1
+    volumes:
+      - ./data/rs2/rs23:/data/db
+    networks:
+      - mongonet
+    command: mongod --shardsvr --replSet "rs2" --bind_ip_all
+    restart: always
+
+
+  cs1:
+    image: mongo:4.4.1
+    volumes:
+      - ./data/cs/cs1:/data/configdb
+    networks:
+      - mongonet
+    command: mongod --configsvr --replSet "cs" --bind_ip_all
+    restart: always
+
+  cs2:
+    image: mongo:4.4.1
+    volumes:
+      - ./data/cs/cs2:/data/configdb
+    networks:
+      - mongonet
+    command: mongod --configsvr --replSet "cs" --bind_ip_all
+    restart: always
+
+  cs3:
+    image: mongo:4.4.1
+    volumes:
+      - ./data/cs/cs3:/data/configdb
+    networks:
+      - mongonet
+    command: mongod --configsvr --replSet "cs" --bind_ip_all
+    restart: always
+
+
+  ms1:
+    image: mongo:4.4.1
+    volumes:
+      - ./data/ms/ms1:/data/db
+      - ./scripts:/scripts
+    networks:
+      - mongonet
+    ports: 
+      - 27017:27017
+    command: mongos --configdb cs/cs1:27019,cs2:27019,cs3:27019 --bind_ip_all
+    restart: always
+  
+  ms2:
+    image: mongo:4.4.1
+    volumes:
+      - ./data/ms/ms2:/data/db
+      - ./scripts:/scripts
+    networks:
+      - mongonet
+    ports: 
+      - 27018:27017
+    command: mongos --configdb cs/cs1:27019,cs2:27019,cs3:27019 --bind_ip_all
+    restart: always
+
+  
+  mongo-express:
+    image: mongo-express:0.54
+    depends_on: 
+      - ms1
+      - ms2
+    ports: 
+      - 8081:8081
+    networks:
+      - mongonet
+    environment:
+      ME_CONFIG_MONGODB_SERVER: ms1
+    restart: always
+networks:
+  mongonet:
+    external: true
+    name: mongonet
+    driver: bridge

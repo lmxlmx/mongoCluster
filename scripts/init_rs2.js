@@ -1,0 +1,9 @@
+rs2_config={
+    _id:"rs2",
+    members:[
+        {_id:0,host:"rs21:27018"},
+        {_id:1,host:"rs22:27018"},
+        {_id:2,host:"rs23:27018"}
+    ]
+}
+rs.initiate(rs2_config)
