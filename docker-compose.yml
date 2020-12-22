@@ -1,32 +1,53 @@
 version: "3.7"
 services:
 
-
   rs11:
     image: mongo:4.4.1
     volumes:
       - ./data/rs1/rs11:/data/db
+      - ./data/dbshell/dbshell_rs11:/home/mongodb/.dbshell
+      - ./data/common/keyfile:/keyfile:ro
+      - ./scripts:/scripts
     networks:
-      - mongonet    
-    command: mongod --shardsvr --replSet "rs1" --bind_ip_all
+      - mongonet
+    ports: 
+      - 27118:27018
+    # environment:    
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: root
+    command: mongod --keyFile /keyfile --shardsvr --replSet "rs1" --bind_ip_all
     restart: always
 
   rs12:
     image: mongo:4.4.1
     volumes:
       - ./data/rs1/rs12:/data/db
+      - ./data/dbshell/dbshell_rs12:/home/mongodb/.dbshell
+      - ./data/common/keyfile:/keyfile:ro
     networks:
       - mongonet
-    command: mongod --shardsvr --replSet "rs1"  --bind_ip_all
+    ports: 
+      - 27128:27018
+    # environment:    
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: root
+    command: mongod --keyFile /keyfile --shardsvr --replSet "rs1"  --bind_ip_all
     restart: always
 
   rs13:
     image: mongo:4.4.1
     volumes:
       - ./data/rs1/rs13:/data/db
+      - ./data/dbshell/dbshell_rs13:/home/mongodb/.dbshell
+      - ./data/common/keyfile:/keyfile:ro
     networks:
       - mongonet
-    command: mongod --shardsvr --replSet "rs1" --bind_ip_all
+    ports: 
+      - 27138:27018
+    # environment:    
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: root 
+    command: mongod --keyFile /keyfile --shardsvr --replSet "rs1" --bind_ip_all
     restart: always
 
   
@@ -34,27 +55,49 @@ services:
     image: mongo:4.4.1
     volumes:
       - ./data/rs2/rs21:/data/db
+      - ./data/dbshell/dbshell_rs21:/home/mongodb/.dbshell
+      - ./data/common/keyfile:/keyfile:ro
+      - ./scripts:/scripts
     networks:
       - mongonet
-    command: mongod --shardsvr --replSet "rs2" --bind_ip_all
+    ports: 
+      - 27218:27018
+    # environment:    
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: root
+    command: mongod --keyFile /keyfile --shardsvr --replSet "rs2" --bind_ip_all
     restart: always
 
   rs22:
     image: mongo:4.4.1
     volumes:
       - ./data/rs2/rs22:/data/db
+      - ./data/dbshell/dbshell_rs22:/home/mongodb/.dbshell
+      - ./data/common/keyfile:/keyfile:ro
     networks:
       - mongonet
-    command: mongod --shardsvr --replSet "rs2" --bind_ip_all
+    ports: 
+      - 27228:27018
+    # environment:    
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: root
+    command: mongod --keyFile /keyfile --shardsvr --replSet "rs2" --bind_ip_all
     restart: always
 
   rs23:
     image: mongo:4.4.1
     volumes:
       - ./data/rs2/rs23:/data/db
+      - ./data/dbshell/dbshell_rs23:/home/mongodb/.dbshell
+      - ./data/common/keyfile:/keyfile:ro
     networks:
       - mongonet
-    command: mongod --shardsvr --replSet "rs2" --bind_ip_all
+    ports: 
+      - 27238:27018
+    # environment:    
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: root
+    command: mongod --keyFile /keyfile --shardsvr --replSet "rs2" --bind_ip_all
     restart: always
 
 
@@ -62,27 +105,49 @@ services:
     image: mongo:4.4.1
     volumes:
       - ./data/cs/cs1:/data/configdb
+      - ./data/dbshell/dbshell_cs1:/home/mongodb/.dbshell
+      - ./data/common/keyfile:/keyfile:ro
+      - ./scripts:/scripts
     networks:
       - mongonet
-    command: mongod --configsvr --replSet "cs" --bind_ip_all
+    ports: 
+      - 27019:27019
+    # environment:    
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: root
+    command: mongod --keyFile /keyfile --configsvr --replSet "cs" --bind_ip_all
     restart: always
 
   cs2:
     image: mongo:4.4.1
     volumes:
       - ./data/cs/cs2:/data/configdb
+      - ./data/dbshell/dbshell_cs2:/home/mongodb/.dbshell
+      - ./data/common/keyfile:/keyfile:ro
     networks:
       - mongonet
-    command: mongod --configsvr --replSet "cs" --bind_ip_all
+    ports: 
+      - 27029:27019
+    # environment:    
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: root
+    command: mongod --keyFile /keyfile --configsvr --replSet "cs" --bind_ip_all
     restart: always
 
   cs3:
     image: mongo:4.4.1
     volumes:
       - ./data/cs/cs3:/data/configdb
+      - ./data/dbshell/dbshell_cs3:/home/mongodb/.dbshell
+      - ./data/common/keyfile:/keyfile:ro
     networks:
       - mongonet
-    command: mongod --configsvr --replSet "cs" --bind_ip_all
+    ports: 
+      - 27039:27019
+    # environment:    
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: root
+    command: mongod --keyFile /keyfile --configsvr --replSet "cs" --bind_ip_all
     restart: always
 
 
@@ -90,24 +155,34 @@ services:
     image: mongo:4.4.1
     volumes:
       - ./data/ms/ms1:/data/db
+      - ./data/dbshell/dbshell_ms1:/home/mongodb/.dbshell
+      - ./data/common/keyfile:/keyfile:ro
       - ./scripts:/scripts
     networks:
       - mongonet
     ports: 
       - 27017:27017
-    command: mongos --configdb cs/cs1:27019,cs2:27019,cs3:27019 --bind_ip_all
+    # environment:    
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: root
+    command: mongos --keyFile /keyfile --configdb cs/cs1:27019,cs2:27019,cs3:27019 --bind_ip_all
     restart: always
   
   ms2:
     image: mongo:4.4.1
     volumes:
       - ./data/ms/ms2:/data/db
+      - ./data/dbshell/dbshell_ms2:/home/mongodb/.dbshell
+      - ./data/common/keyfile:/keyfile:ro
       - ./scripts:/scripts
     networks:
       - mongonet
     ports: 
-      - 27018:27017
-    command: mongos --configdb cs/cs1:27019,cs2:27019,cs3:27019 --bind_ip_all
+      - 27027:27017
+    # environment:    
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: root
+    command: mongos --keyFile /keyfile --configdb cs/cs1:27019,cs2:27019,cs3:27019 --bind_ip_all
     restart: always
 
   
